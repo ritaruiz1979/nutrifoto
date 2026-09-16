@@ -1,12 +1,26 @@
 {
-  "name":"NutriFoto",
-  "short_name":"NutriFoto",
-  "start_url":".",
-  "display":"standalone",
-  "background_color":"#f5f7f5",
-  "theme_color":"#2e7d32",
-  "description":"Analiza una foto de comida y muestra información nutricional estimada.",
-  "icons":[
-    {"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+  "name": "NutriFoto",
+  "short_name": "NutriFoto",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#f5f7f5",
+  "theme_color": "#2e7d32",
+  "description": "Analiza una foto de comida y muestra información nutricional estimada.",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
   ]
 }
