@@ -29,8 +29,7 @@ api_key =
 os.getenv("GEMINI_API_KEY")
 
 if not api_key:
-    raise RuntimeError("Falta 
-    la variable GEMINI_API_KEY")
+    raise RuntimeError("Falta la variable GEMINI_API_KEY")
 
 
 client = 
