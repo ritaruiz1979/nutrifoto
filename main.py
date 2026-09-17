@@ -39,8 +39,8 @@ genai.Client(api_key=api_key)
 
 @app.get("/")
 def home():
-    return {"status": 
-    "NutriFoto API funcionando"}
+    return {"status":    
+"NutriFoto API funcionando"}
 
 
 @app.post("/analyze")
@@ -48,30 +48,26 @@ async def analyze(file:
 UploadFile = File(...)):
 
     if not file.content_type 
-    or not 
-    file.content_type.startswith(
-    "image/"):
-            raise HTTPException(
-            status_code=400,
-            detail="El 
-            archivo debe ser una imagen"
-        )
-
-    image_bytes = await
-    file.read()
-
-    if not image_bytes:
+or not 
+file.content_type.startswith(   
+"image/"):
         raise HTTPException(
             status_code=400,
-            detail="La imagen 
-            está vacía"
-        )
+            detail="El 
+ archivo deber ser una imagen"
+         )
 
-    image_base64 = 
-    base64.b64encode(image_bytes)
-    .decode("utf-8")
+     image_bytes = await
+ file.read()
 
-        prompt = """
+     if not image_bytes:
+         raise HTTPException(
+             status_code=400,
+             detail="La imagen 
+ está vacía"
+             )
+
+    prompt = """
 Analiza esta fotografía
 de comida para NutriFoto.
 
@@ -125,45 +121,47 @@ indícalo en "observaciones".
         response = 
 client.models.generate_conten
 t(
-            model="gemini-3.8-flash",
-                        contents=[
-            types.Part.from_text(text=prompt),
-            types.Part.from_bytes(
-            data=image_bytes,
-            mime_type=file.content_type
-                            )
-                        ],
-            config=types.GenerateContentC
-            onfig(
-            response_mime_type="application/json",
-            temperature=0.2
-                        )
-                    )
-
-                    text = 
-             response.text.strip()
-
-                    result = 
-        json.loads(text)
-
-                return result
-
-            except 
-        json.JSONDecodeError:
-                 raise HTTPException(
-                     status_code=500,
-                     detail="Gemini no 
-        devolvió un resultado JSON 
-         válido"
+model="gemini-3.8-flash",
+            contents=[
+types.Part.from_text(text=pro
+mpt),
+types.Part.from_bytes(
+data=image_bytes,
+mime_type=file.content_type
                  )
+            ],
+config=types.GenerateContentC
+onfig(
+response_mime_type="applicati
+on/json",
+temperature=0.2
+            )
+        )
 
-             except Exception as e:
-                 import traceback
-                 traceback.print_exc()
+        text = 
+response.text.strip()
+
+        result = 
+json.loads(text)
+
+        return result
+
+     except 
+json.JSONDecodeError:
+        raise HTTPException(
+            status_code=500,
+            detail="Gemini no 
+devolvió un resultado JSON 
+válido"
+        )
+
+       except Exception as e:
+           import traceback
+           traceback.print_exc()
    
-                 raise HTTPException(
-                     status_code=500,
-                     detail=f"ERROR 
-         REAL GEMINI: 
-          {type(e).__name__}: {str(e)}"
-                  )
+        raise HTTPException(
+            status_code=500,
+            detail=f"ERROR 
+REAL GEMINI: 
+{type(e).__name__}: {str(e)}"
+        )
