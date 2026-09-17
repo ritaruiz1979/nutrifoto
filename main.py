@@ -114,18 +114,19 @@ indícalo en "observaciones".
             text = text.replace("```", "")
             text = text.strip()
 
-        result = json.loads(text)
+                result = 
+        json.loads(text)
 
-        return result
-                except 
+                return result
+                
+            except 
         json.JSONDecodeError:
-                    raise 
-        HTTPException(
-        status_code=500,
-                        detail="La IA 
-        no devolvió un resultado JSON 
+                raise HTTPException(
+                    status_code=500,
+                    detail="La IA no
+        devolvió un resultado JSON 
         válido"
-                    )
+                   )
 
            except Exception as e:
                import traceback
