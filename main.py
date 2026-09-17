@@ -41,8 +41,11 @@ async def analyze(file: UploadFile = File(...)):
             contents=[
                 {
                     "inline_data": {
-                        "mime_type": file.content_type,
-                        "data": base64.b64encode(image_bytes).decode("utf-8")
+                        "mime_type": 
+         file.content_type,
+                         "data":
+         base64.b64encode(image_bytes)
+         .decode("utf-8")
                     }
                 },
                 (
@@ -61,9 +64,12 @@ async def analyze(file: UploadFile = File(...)):
         }
 
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         raise HTTPException(
             status_code=500,
-            detail=f"Error al analizar la imagen: {str(e)}"
+            detail=f"Error al 
+    analizar la imagen: {str(e)}"
         )
 
 
