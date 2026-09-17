@@ -125,7 +125,9 @@ indícalo en "observaciones".
         )
 
     except Exception as e:
-        raise HTTPException(
-            status_code=500,
-            detail=f"Error al analizar la imagen: {str(e)}"
-        )
+    import traceback
+    traceback.print_exc()
+    raise HTTPException(
+        status_code=500,
+        detail=f"ERROR REAL OPENAI: {type(e).__name__}: {str(e)}"
+    )
