@@ -1,4 +1,3 @@
-
 import os
 import json
 import base64
@@ -31,10 +30,21 @@ def home():
 
 @app.post("/analyze")
 async def analyze(file: UploadFile = File(...)):
+
     if not file.content_type or not file.content_type.startswith("image/"):
-        raise HTTPException(status_code=400, detail="El archivo debe ser una imagen")
+        raise HTTPException(
+            status_code=400,
+            detail="El archivo debe ser una imagen"
+        )
 
     image_bytes = await file.read()
+
+    if not image_bytes:
+        raise HTTPException(
+            status_code=400,
+            detail="La imagen está vacía"
+        )
+
     image_base64 = base64.b64encode(image_bytes).decode("utf-8")
 
     prompt = """
@@ -42,7 +52,9 @@ Analiza esta fotografía de comida para NutriFoto.
 
 Identifica los alimentos visibles y estima la cantidad aproximada de cada uno.
 
-Devuelve ÚNICAMENTE un JSON válido con esta estructura:
+Devuelve ÚNICAMENTE JSON válido, sin markdown ni texto adicional.
+
+La estructura debe ser exactamente:
 
 {
   "alimentos": [
@@ -70,8 +82,8 @@ Devuelve ÚNICAMENTE un JSON válido con esta estructura:
 }
 
 Las cantidades son estimaciones basadas únicamente en la fotografía.
-Si un alimento o cantidad no puede determinarse con seguridad, indícalo
-en "observaciones".
+Si un alimento o cantidad no puede determinarse con seguridad,
+indícalo en "observaciones".
 """
 
     try:
@@ -94,7 +106,14 @@ en "observaciones".
             ]
         )
 
-        text = response.output_text
+        text = response.output_text.strip()
+
+        # Por si la IA devuelve el JSON dentro de ```json ... ```
+        if text.startswith("```"):
+            text = text.replace("```json", "", 1)
+            text = text.replace("```", "")
+            text = text.strip()
+
         result = json.loads(text)
 
         return result
@@ -108,5 +127,5 @@ en "observaciones".
     except Exception as e:
         raise HTTPException(
             status_code=500,
-            detail=str(e)
+            detail=f"Error al analizar la imagen: {str(e)}"
         )
