@@ -127,16 +127,11 @@ analyze.addEventListener('click', async () => {
 
   } catch (error) {
     console.error(error);
-
-    let mensaje = error.message;
-
-    try {
-      const texto = await response.text();
-      mensaje = texto || mensaje;
-    } catch (_) {}
-
     status.textContent =
-      '❌ Error del servidor: ' + mensaje;
+      '❌ Error: ' + (error.message || 'No se ha podido conectar con el servidor.');
+} finally {
+    analyze.disabled = false;
+ }
   }
   } finally {
     analyze.disabled = false;
