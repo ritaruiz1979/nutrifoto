@@ -1,10 +1,12 @@
-import os
+     import os
 import json
 import base64
 
 from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-from openai import OpenAI
+
+from google import genai
+from google.genai import types
 
 
 app = FastAPI()
@@ -19,13 +21,13 @@ app.add_middleware(
 )
 
 
-api_key = os.getenv("OPENAI_API_KEY")
+api_key = os.getenv("GEMINI_API_KEY")
 
 if not api_key:
-    raise RuntimeError("Falta la variable OPENAI_API_KEY")
+    raise RuntimeError("Falta la variable GEMINI_API_KEY")
 
 
-client = OpenAI(api_key=api_key)
+client = genai.Client(api_key=api_key)
 
 
 @app.get("/")
@@ -57,7 +59,7 @@ Analiza esta fotografía de comida para NutriFoto.
 
 Identifica los alimentos visibles y estima la cantidad aproximada de cada uno.
 
-Devuelve ÚNICAMENTE JSON válido, sin markdown ni texto adicional.
+Devuelve ÚNICAMENTE un objeto JSON válido.
 
 La estructura debe ser exactamente:
 
@@ -93,35 +95,22 @@ indícalo en "observaciones".
 """
 
     try:
-        response = client.responses.create(
-            model="gpt-5.6-luna",
-            input=[
-                {
-                    "role": "user",
-                    "content": [
-                        {
-                            "type": "input_text",
-                            "text": prompt
-                        },
-                        {
-                            "type": "input_image",
-                            "image_url": (
-                                f"data:{file.content_type};base64,"
-                                f"{image_base64}"
-                            )
-                        }
-                    ]
-                }
-            ]
+        response = client.models.generate_content(
+            model="gemini-3.8-flash",
+            contents=[
+                types.Part.from_text(text=prompt),
+                types.Part.from_bytes(
+                    data=image_bytes,
+                    mime_type=file.content_type
+                )
+            ],
+            config=types.GenerateContentConfig(
+                response_mime_type="application/json",
+                temperature=0.2
+            )
         )
 
-        text = response.output_text.strip()
-
-        # Por si la IA devuelve el JSON dentro de ```json ... ```
-        if text.startswith("```"):
-            text = text.replace("```json", "", 1)
-            text = text.replace("```", "")
-            text = text.strip()
+        text = response.text.strip()
 
         result = json.loads(text)
 
@@ -130,7 +119,7 @@ indícalo en "observaciones".
     except json.JSONDecodeError:
         raise HTTPException(
             status_code=500,
-            detail="La IA no devolvió un resultado JSON válido"
+            detail="Gemini no devolvió un resultado JSON válido"
         )
 
     except Exception as e:
@@ -139,5 +128,5 @@ indícalo en "observaciones".
 
         raise HTTPException(
             status_code=500,
-            detail=f"ERROR REAL OPENAI: {type(e).__name__}: {str(e)}"
+            detail=f"ERROR REAL GEMINI: {type(e).__name__}: {str(e)}"
         )
