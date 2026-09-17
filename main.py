@@ -68,8 +68,7 @@ async def analyze(file: UploadFile = File(...)):
         traceback.print_exc()
         raise HTTPException(
             status_code=500,
-            detail=f"Error al 
-    analizar la imagen: {str(e)}"
+            detail=f"Error al analizar la imagen: {str(e)}"
         )
 
 
