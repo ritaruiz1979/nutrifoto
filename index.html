@@ -61,17 +61,77 @@ photo.addEventListener('change',()=>{
  const f=photo.files[0]; if(!f)return;
  preview.src=URL.createObjectURL(f); preview.style.display='block'; analyze.style.display='block'; status.textContent='Foto preparada. Pulsa «Analizar plato».';
 });
-analyze.addEventListener('click',()=>{
- status.textContent='Analizando…';
- setTimeout(()=>{
-   // Demo local. Sustituir esta función por la llamada al backend/IA.
-   const demo={carbs:62,kcal:610,protein:31,fat:22,fiber:8,sugar:6,
-     foods:[['Arroz cocido','≈ 180 g'],['Pollo','≈ 120 g'],['Verduras','≈ 150 g'],['Aceite/salsa','≈ 10 g']]};
-   for(const [id,val] of Object.entries(demo)){if(id==='foods')continue;document.getElementById(id).textContent=val}
-   document.getElementById('foods').innerHTML=demo.foods.map(x=>`<div class="food"><b>${x[0]}</b><br><span class="muted">${x[1]}</span></div>`).join('');
-   results.style.display='block'; status.textContent='Análisis terminado (modo demostración).';
-   results.scrollIntoView({behavior:'smooth'});
- },900);
+analyze.addEventListener('click', async () => {
+  const file = photo.files[0];
+
+  if (!file) {
+    status.textContent = 'Primero selecciona una foto.';
+    return;
+  }
+
+  status.textContent = '🔎 Analizando tu plato…';
+  analyze.disabled = true;
+
+  const formData = new FormData();
+  formData.append('file', file);
+
+  try {
+    const response = await fetch('https://nutrifoto-t07h.onrender.com/analyze', {
+      method: 'POST',
+      body: formData
+    });
+
+    if (!response.ok) {
+      throw new Error('El servidor no ha podido analizar la imagen.');
+    }
+
+    const data = await response.json();
+
+    document.getElementById('carbs').textContent =
+      data.totales.hidratos_g ?? '—';
+
+    document.getElementById('kcal').textContent =
+      data.totales.calorias ?? '—';
+
+    document.getElementById('protein').textContent =
+      data.totales.proteinas_g ?? '—';
+
+    document.getElementById('fat').textContent =
+      data.totales.grasas_g ?? '—';
+
+    document.getElementById('fiber').textContent =
+      data.totales.fibra_g ?? '—';
+
+    document.getElementById('sugar').textContent =
+      data.totales.azucares_g ?? '—';
+
+    const foods = document.getElementById('foods');
+
+    foods.innerHTML = (data.alimentos || []).map(food => `
+      <div class="food">
+        <b>${food.nombre}</b><br>
+        <span class="muted">
+          ${food.cantidad_g} g ·
+          ${food.hidratos_g} g hidratos ·
+          ${food.calorias} kcal
+        </span>
+      </div>
+    `).join('');
+
+    results.style.display = 'block';
+
+    status.textContent =
+      '✅ Análisis terminado. Los valores son estimaciones.';
+
+    results.scrollIntoView({ behavior: 'smooth' });
+
+  } catch (error) {
+    console.error(error);
+    status.textContent =
+      '❌ No se ha podido analizar la foto. Comprueba la conexión con el servidor.';
+  } finally {
+    analyze.disabled = false;
+  }
 });
 if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{});}
 </script>
