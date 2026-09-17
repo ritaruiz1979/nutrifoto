@@ -117,19 +117,19 @@ indícalo en "observaciones".
         result = json.loads(text)
 
         return result
-
-    except json.JSONDecodeError:
-        raise HTTPException(
-            status_code=500,
-            detail="La IA no devolvió un resultado JSON válido"
+        except 
+    json.JSONDecodeError:
+            raise HTTPException(
+                status_code=500,
+                detail="La IA no devolvió un resultado JSON válido"
         )
 
         except Exception as e:
-        import traceback
-        traceback.print_exc()
-        raise HTTPException(
-            status_code=500,
-            detail=f"ERROR
-            REAL OPENAI:
-            {type(e).__name__}: {str(e)}"
+            import traceback
+            traceback.print_exc()
+            raise HTTPException(
+                status_code=500,
+                detail=f"ERROR 
+    REAL OPENAI: 
+    {type(e).__name__}: {str(e)}"
         )
