@@ -129,5 +129,7 @@ indícalo en "observaciones".
         traceback.print_exc()
         raise HTTPException(
             status_code=500,
-            detail=f"ERROR REAL OPENAI: {type(e).__name__}: {str(e)}"
+            detail=f"ERROR
+            REAL OPENAI:
+            {type(e).__name__}: {str(e)}"
         )
