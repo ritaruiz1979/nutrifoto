@@ -1,11 +1,14 @@
 import os
 import json
 import base64
+
 from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from openai import OpenAI
 
+
 app = FastAPI()
+
 
 app.add_middleware(
     CORSMiddleware,
@@ -15,10 +18,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+
 api_key = os.getenv("OPENAI_API_KEY")
 
 if not api_key:
     raise RuntimeError("Falta la variable OPENAI_API_KEY")
+
 
 client = OpenAI(api_key=api_key)
 
@@ -82,6 +87,7 @@ La estructura debe ser exactamente:
 }
 
 Las cantidades son estimaciones basadas únicamente en la fotografía.
+
 Si un alimento o cantidad no puede determinarse con seguridad,
 indícalo en "observaciones".
 """
@@ -99,7 +105,10 @@ indícalo en "observaciones".
                         },
                         {
                             "type": "input_image",
-                            "image_url": f"data:{file.content_type};base64,{image_base64}"
+                            "image_url": (
+                                f"data:{file.content_type};base64,"
+                                f"{image_base64}"
+                            )
                         }
                     ]
                 }
@@ -114,26 +123,21 @@ indícalo en "observaciones".
             text = text.replace("```", "")
             text = text.strip()
 
-                result = 
-        json.loads(text)
+        result = json.loads(text)
 
-                return result
-                
-            except 
-        json.JSONDecodeError:
-                raise HTTPException(
-                    status_code=500,
-                    detail="La IA no
-        devolvió un resultado JSON 
-        válido"
-                   )
+        return result
 
-           except Exception as e:
-               import traceback
-               traceback.print_exc()
-               raise HTTPException(
-                   status_code=500,
-                   detail=f"ERROR 
-        REAL OPENAI: 
-        {type(e).__name__}: {str(e)}"
-                )
+    except json.JSONDecodeError:
+        raise HTTPException(
+            status_code=500,
+            detail="La IA no devolvió un resultado JSON válido"
+        )
+
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+
+        raise HTTPException(
+            status_code=500,
+            detail=f"ERROR REAL OPENAI: {type(e).__name__}: {str(e)}"
+        )
