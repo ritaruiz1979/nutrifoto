@@ -56,11 +56,25 @@ input[type=file]{display:none}.preview{width:100%;max-height:360px;object-fit:co
 </section>
 </main>
 <script>
-const photo=document.getElementById('photo'), preview=document.getElementById('preview'), analyze=document.getElementById('analyze'), status=document.getElementById('status'), results=document.getElementById('results');
-photo.addEventListener('change',()=>{
- const f=photo.files[0]; if(!f)return;
- preview.src=URL.createObjectURL(f); preview.style.display='block'; analyze.style.display='block'; status.textContent='Foto preparada. Pulsa «Analizar plato».';
+const photo = document.getElementById('photo');
+const preview = document.getElementById('preview');
+const analyze = document.getElementById('analyze');
+const status = document.getElementById('status');
+const results = document.getElementById('results');
+
+photo.addEventListener('change', () => {
+  const f = photo.files[0];
+
+  if (!f) return;
+
+  preview.src = URL.createObjectURL(f);
+  preview.style.display = 'block';
+
+  analyze.style.display = 'block';
+
+  status.textContent = 'Foto preparada. Pulsa «Analizar plato».';
 });
+
 analyze.addEventListener('click', async () => {
   const file = photo.files[0];
 
@@ -76,13 +90,18 @@ analyze.addEventListener('click', async () => {
   formData.append('file', file);
 
   try {
-    const response = await fetch('https://nutrifoto-t07h.onrender.com/analyze', {
-      method: 'POST',
-      body: formData
-    });
+    const response = await fetch(
+      'https://nutrifoto-t07h.onrender.com/analyze',
+      {
+        method: 'POST',
+        body: formData
+      }
+    );
 
     if (!response.ok) {
-      throw new Error('El servidor no ha podido analizar la imagen.');
+      throw new Error(
+        'El servidor no ha podido analizar la imagen.'
+      );
     }
 
     const data = await response.json();
@@ -123,20 +142,27 @@ analyze.addEventListener('click', async () => {
     status.textContent =
       '✅ Análisis terminado. Los valores son estimaciones.';
 
-    results.scrollIntoView({ behavior: 'smooth' });
+    results.scrollIntoView({
+      behavior: 'smooth'
+    });
 
   } catch (error) {
     console.error(error);
+
     status.textContent =
-      '❌ Error: ' + (error.message || 'No se ha podido conectar con el servidor.');
-} finally {
-    analyze.disabled = false;
- }
-  }
+      '❌ Error: ' +
+      (error.message ||
+       'No se ha podido conectar con el servidor.');
+
   } finally {
     analyze.disabled = false;
   }
 });
-if('serviceWorker' in navigator){navigator.serviceWorker.register('sw.js').catch(()=>{});}
+
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker
+    .register('sw.js')
+    .catch(() => {});
+}
 </script>
 </body></html>
