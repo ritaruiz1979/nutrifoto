@@ -128,11 +128,12 @@ analyze.addEventListener('click', async () => {
 
     foods.innerHTML = (data.alimentos || []).map(food => `
       <div class="food">
-        <b>${food.nombre}</b><br>
+        <b>${food.nombre} ||
+        'Alimento}'</b><br>
         <span class="muted">
-          ${food.cantidad_g} g ·
-          ${food.hidratos_g} g hidratos ·
-          ${food.calorias} kcal
+          ${food.cantidad_g ?? 0} g ·
+          ${food.hidratos_g ?? 0} g hidratos ·
+          ${food.calorias ?? 0} kcal
         </span>
       </div>
     `).join('');
