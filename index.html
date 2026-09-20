@@ -243,9 +243,11 @@ analyze.addEventListener('click', async () => {
 
   analyze.disabled = true;
 
-  const formData = new FormData();
+  const compressedFile = await compressImage(selectedFile);
 
-  formData.append('file', selectedFile);
+const formData = new FormData();
+
+formData.append('file', compressedFile, 'nutrifoto.jpg');
 
   try {
 
