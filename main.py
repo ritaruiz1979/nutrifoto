@@ -98,6 +98,7 @@ Si no puedes identificar con certeza un alimento, utiliza la descripción más r
 
                     config=types.GenerateContentConfig(
                         response_mime_type="application/json",
+                        max_output_tokens=500,
                         response_schema={
                             "type": "object",
                             "properties": {
