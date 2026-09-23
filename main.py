@@ -180,7 +180,7 @@ Si no puedes identificar con certeza un alimento, utiliza la descripción más r
                     or "UNAVAILABLE" in error_text
                     or "429" in error_text
                 ):
-                    time.sleep(2 * (attempt + 1))
+                    time.sleep(5 * (attempt + 1))
                     continue
 
                 raise
