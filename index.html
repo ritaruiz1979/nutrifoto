@@ -255,7 +255,7 @@ async function compressImage(file) {
     img.src = imageUrl;
   });
 
-  const maxSize = 1600;
+  const maxSize = 1280;
 
   let width = img.width;
   let height = img.height;
@@ -286,7 +286,7 @@ async function compressImage(file) {
     canvas.toBlob(
       (blob) => resolve(blob),
       'image/jpeg',
-      0.75
+      0.70
     );
   });
 }
