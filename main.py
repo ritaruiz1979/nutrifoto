@@ -181,14 +181,14 @@ Si no puedes identificar con certeza un alimento, utiliza la descripción más r
                                      or "429" in error_text
                                   ):
                                      if attempt == 0:
-                                    time.sleep(10)
-                                    continue
+                                      time.sleep(10)
+                                      continue
 
                                      if attempt == 1:
-                                         time.sleep(20)
-                                         continue
+                                      time.sleep(20)
+                                      continue
    
-                                      raise
+                                     raise
 
 
                  if response is None:
