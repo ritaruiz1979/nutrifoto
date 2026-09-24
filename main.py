@@ -169,8 +169,7 @@ Si no puedes identificar con certeza un alimento, utiliza la descripción más r
 
                 break
 
-            except: 
-Exception as e:
+            except Exception as e:
 
                  last_error = e
 
