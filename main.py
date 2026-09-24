@@ -175,7 +175,7 @@ Si no puedes identificar con certeza un alimento, utiliza la descripción más r
 
                 error_text = str(e)
 
-                                if (
+                if (
                     "503" in error_text
                     or "UNAVAILABLE" in error_text
                     or "429" in error_text
@@ -188,11 +188,11 @@ Si no puedes identificar con certeza un alimento, utiliza la descripción más r
                         time.sleep(20)
                         continue
 
-                raise
+                     raise
 
 
-        if response is None:
-            raise last_error
+                 if response is None:
+                     raise last_error
 
 
         text = response.text.strip()
