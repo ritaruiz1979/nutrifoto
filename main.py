@@ -169,18 +169,20 @@ Si no puedes identificar con certeza un alimento, utiliza la descripción más r
 
                 break
 
-            except Exception as e:
+            except 
+Exception as e:
 
-                last_error = e
+                 last_error = e
 
-                error_text = str(e)
+                 error_text = str(e)
 
                 if (
-                    "503" in error_text
-                    or "UNAVAILABLE" in error_text
-                    or "429" in error_text
+                    "503" in error_text 
+                                    or 
+                    "UNAVAILABLE" in error_text
+                                    or "429" in error_text
                 ):
-                    if attempt == 0:
+                                    if attempt == 0:
                         time.sleep(10)
                         continue
 
