@@ -175,17 +175,17 @@ Si no puedes identificar con certeza un alimento, utiliza la descripción más r
 
                  error_text = str(e)
 
-                if (
-                    "503" in error_text 
-                                    or 
-                    "UNAVAILABLE" in error_text
-                                    or "429" in error_text
+                               if (
+                     "503" in error_text 
+                      or 
+                                 "UNAVAILABLE" in error_text
+                                  or "429" in error_text
                 ):
                                     if attempt == 0:
                         time.sleep(10)
                         continue
 
-                    if attempt == 1:
+                                     if attempt == 1:
                         time.sleep(20)
                         continue
 
