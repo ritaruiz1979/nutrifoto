@@ -203,6 +203,14 @@ cameraButton.addEventListener('click', () => {
 galleryButton.addEventListener('click', () => {
   gallery.click();
 });
+  /* BOTÓN HISTORIAL */
+
+historyButton.addEventListener('click', () => {
+  history.style.display = 'block';
+  history.scrollIntoView({
+    behavior: 'smooth'
+  });
+});
 
 
 /* FOTO DESDE CÁMARA */
