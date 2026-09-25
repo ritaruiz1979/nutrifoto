@@ -206,10 +206,46 @@ galleryButton.addEventListener('click', () => {
   /* BOTÓN HISTORIAL */
 
 historyButton.addEventListener('click', () => {
+
+  const historyList =
+    document.getElementById('historyList');
+
+  const historial =
+    JSON.parse(
+      localStorage.getItem('nutrifotoHistorial') || '[]'
+    );
+
+  if (historial.length === 0) {
+
+    historyList.innerHTML =
+      '<p class="muted">Todavía no hay análisis guardados.</p>';
+
+  } else {
+
+    historyList.innerHTML = historial.map(item => `
+
+      <div class="food">
+
+        <b>📅 ${item.fecha}</b><br>
+
+        <span class="muted">
+          Hidratos: ${item.hidratos} g ·
+          UGP: ${item.ugp} ·
+          Calorías: ${item.calorias} kcal
+        </span>
+
+      </div>
+
+    `).join('');
+
+  }
+
   history.style.display = 'block';
+
   history.scrollIntoView({
     behavior: 'smooth'
   });
+
 });
 
 
