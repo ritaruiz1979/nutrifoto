@@ -401,6 +401,19 @@ document.getElementById('ugp').textContent =
 
     status.textContent =
       '✅ Análisis terminado. Los valores son estimaciones.';
+    localStorage.setItem(
+  'nutrifotoHistorial',
+  JSON.stringify({
+    fecha: new Date().toLocaleString('es-ES'),
+    hidratos: hidratosTotales.toFixed(1),
+    ugp: ugp.toFixed(2),
+    calorias: data.totales.calorias ?? '—',
+    proteinas: data.totales.proteinas_g ?? '—',
+    grasas: data.totales.grasas_g ?? '—',
+    fibra: data.totales.fibra_g ?? '—',
+    azucares: data.totales.azucares_g ?? '—'
+  })
+);
 
 
     results.scrollIntoView({
