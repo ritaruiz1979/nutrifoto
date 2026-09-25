@@ -131,10 +131,16 @@ style="display:none;margin-top:12px"
 
 
 
-<p id="status" class="muted"></p></section><section id="results" class="card"><h2>📊 Resultado estimado</h2><div class="grid"><div class="metric">
-  Hidratos
+<p id="status" class="muted"></p></section><section id="results" class="card"><h2>📊 Resultado estimado</h2><div class="metric">
+  Hidratos totales
   <b id="carbs">—</b>
   <span class="small">g</span>
+</div>
+
+<div class="metric">
+  UGP
+  <b id="ugp">—</b>
+  <span class="small">unidades</span>
 </div><div class="metric">
   Calorías
   <b id="kcal">—</b>
@@ -313,8 +319,24 @@ formData.append('file', compressedFile, 'nutrifoto.jpg');
     const data = await response.json();
 
 
-    document.getElementById('carbs').textContent =
-      data.totales.hidratos_g ?? '—';
+    const hidratos = Number(data.totales.hidratos_g) || 0;
+const proteinas = Number(data.totales.proteinas_g) || 0;
+const grasas = Number(data.totales.grasas_g) || 0;
+
+const ugp =
+  (grasas * 9 + proteinas * 4) / 150;
+
+const hidratosUGP =
+  ugp * 10;
+
+const hidratosTotales =
+  hidratos + hidratosUGP;
+
+document.getElementById('carbs').textContent =
+  hidratosTotales.toFixed(1);
+
+document.getElementById('ugp').textContent =
+  ugp.toFixed(2);
 
     document.getElementById('kcal').textContent =
       data.totales.calorias ?? '—';
