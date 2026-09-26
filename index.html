@@ -211,10 +211,9 @@ historyButton.addEventListener('click', () => {
     document.getElementById('historyList');
 
   const historial =
-    JSON.parse(
-      localStorage.getItem('nutrifotoHistorial') || '[]'
-    );
-
+    const historial = JSON.parse(
+  localStorage.getItem('nutrifotoHistorial') || '[]'
+);
   if (historial.length === 0) {
 
     historyList.innerHTML =
