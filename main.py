@@ -77,7 +77,7 @@ Si no puedes identificar con certeza un alimento, utiliza la descripción más r
         response = None
         last_error = None
 
-         for attempt in range(3):
+        for attempt in range(3):
 
             try:
 
@@ -194,7 +194,23 @@ Si no puedes identificar con certeza un alimento, utiliza la descripción más r
 
                 if response is None:
                     raise last_error
+          text = response.text.strip()
 
+        try:
+            data = json.loads(text)
+
+        except json.JSONDecodeError:
+
+            print("RESPUESTA DE GEMINI:")
+            print(text)
+
+            raise HTTPException(
+                status_code=500,
+                detail="Gemini no devolvió un JSON válido."
+            )
+
+        data["reintentos"] = attempt
+        return data
 
         try:
             data = json.loads(text)
