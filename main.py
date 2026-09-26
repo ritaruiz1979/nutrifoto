@@ -181,12 +181,14 @@ Si no puedes identificar con certeza un alimento, utiliza la descripción más r
                                      or "429" in error_text
                                   ):
                                      if attempt == 0:
-                                      time.sleep(10)
-                                      continue
+    print("REINTENTO AUTOMÁTICO 2/3")
+    time.sleep(10)
+    continue
 
-                                     if attempt == 1:
-                                      time.sleep(20)
-                                      continue
+if attempt == 1:
+    print("REINTENTO AUTOMÁTICO 3/3")
+    time.sleep(20)
+    continue
    
                                      raise
 
