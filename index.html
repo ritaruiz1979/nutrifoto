@@ -329,32 +329,39 @@ historyButton.addEventListener('click', () => {
   } else {
 
     historyList.innerHTML =
-      historial.map(item => `
+  historial.map((item, index) => `
 
-        <div class="food">
+    <div class="food">
 
-          ${
-            item.foto
-              ? `<img
-                  src="${item.foto}"
-                  alt="Foto del plato"
-                  style="width:100%;max-height:220px;object-fit:cover;border-radius:14px;margin-bottom:10px"
-                >`
-              : ''
-          }
+      ${
+        item.foto
+          ? `<img
+              src="${item.foto}"
+              alt="Foto del plato"
+              style="width:100%;max-height:220px;object-fit:cover;border-radius:14px;margin-bottom:10px"
+            >`
+          : ''
+      }
 
-          <b>📅 ${item.fecha}</b><br>
+      <b>📅 ${item.fecha}</b><br>
 
-          <span class="muted">
-            Hidratos: ${item.hidratos} g ·
-            UGP: ${item.ugp} ·
-            Calorías: ${item.calorias} kcal
-          </span>
+      <span class="muted">
+        Hidratos: ${item.hidratos} g ·
+        UGP: ${item.ugp} ·
+        Calorías: ${item.calorias} kcal
+      </span>
 
-        </div>
+      <button
+        class="secondary"
+        style="margin-top:10px"
+        onclick="borrarHistorial(${index})"
+      >
+        🗑️ Borrar
+      </button>
 
-      `).join('');
+    </div>
 
+  `).join('');
   }
 
   history.style.display = 'block';
@@ -365,7 +372,29 @@ historyButton.addEventListener('click', () => {
 
 });
 
+function borrarHistorial(index) {
 
+  const confirmar =
+    confirm('¿Quieres borrar este análisis del historial?');
+
+  if (!confirmar) {
+    return;
+  }
+
+  const historial = JSON.parse(
+    localStorage.getItem('nutrifotoHistorial') || '[]'
+  );
+
+  historial.splice(index, 1);
+
+  localStorage.setItem(
+    'nutrifotoHistorial',
+    JSON.stringify(historial)
+  );
+
+  historyButton.click();
+
+}
 /* FOTO DESDE CÁMARA */
 
 camera.addEventListener('change', () => {
