@@ -495,9 +495,10 @@ document.getElementById('ugp').textContent =
       ? ' reintento automático. Los valores son estimaciones.'
       : ' reintentos automáticos. Los valores son estimaciones.');
     }
+   const fotoHistorial = 
   JSON.parse(localStorage.getItem('nutrifotoHistorial') || '[]');
 
-const fotoHistorial =
+
   await createThumbnail(compressedFile);
 
 historial.unshift({
