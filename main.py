@@ -79,7 +79,7 @@ Si no puedes identificar con certeza un alimento, utiliza la descripción más r
 
         for attempt in range(3):
 
-            try:
+        try:
 
                 response = client.models.generate_content(
                     model="gemini-3.6-flash",
@@ -167,33 +167,39 @@ Si no puedes identificar con certeza un alimento, utiliza la descripción más r
                     )
                 )
 
-                break
+                                   break
 
-                        except Exception as e:
+         except 
+                   Exception as e:
 
-                last_error = e
+                                   last_error = e
 
-                error_text = str(e)
+                                   error_text = str(e)
 
-                if (
-                    "503" in error_text
-                    or "UNAVAILABLE" in error_text
-                    or "429" in error_text
-                ):
-                    if attempt == 0:
-                        print("REINTENTO AUTOMÁTICO 2/3")
-                        time.sleep(10)
-                        continue
+                                   if (
+                                       "503" in error_text
+                                       or 
+                    "UNAVAILABLE" in error_text
+                                        or
+                    "429" in error_text
+                                    ):
+                                        if
+                    attempt == 0:
+                    print("REINTENTO AUTOMÁTICO 2/3")
+                    time.sleep(10)
+                    continue
+                                         if 
+                    attempt == 1:
+                    print("REINTENTO AUTOMÁTICO 3/3")
+                    time.sleep(20)
+                    continue
 
-                    if attempt == 1:
-                        print("REINTENTO AUTOMÁTICO 3/3")
-                        time.sleep(20)
-                        continue
+                                         raise
 
-                    raise
-
-                if response is None:
-                    raise last_error
+                                      if response 
+is None:
+                                          raise
+last_error
                      raise last_error
 
 
