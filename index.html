@@ -484,9 +484,17 @@ document.getElementById('ugp').textContent =
     results.style.display = 'block';
 
 
-    status.textContent =
-      '✅ Análisis terminado. Los valores son estimaciones.';
-    const historial =
+    if (data.reintentos === 0) {
+  status.textContent =
+    '✅ Análisis terminado. Sin reintentos. Los valores son estimaciones.';
+} else {
+  status.textContent =
+    '✅ Análisis terminado. Se utilizó ' +
+    data.reintentos +
+    (data.reintentos === 1
+      ? ' reintento automático. Los valores son estimaciones.'
+      : ' reintentos automáticos. Los valores son estimaciones.');
+    }
   JSON.parse(localStorage.getItem('nutrifotoHistorial') || '[]');
 
 const fotoHistorial =
