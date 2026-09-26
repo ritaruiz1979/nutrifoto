@@ -42,6 +42,7 @@ def home():
 async def analyze(file: UploadFile = File(...)):
 
     try:
+
         image_bytes = await file.read()
 
         if not image_bytes:
@@ -73,9 +74,9 @@ Responde en español.
 Si no puedes identificar con certeza un alimento, utiliza la descripción más razonable posible.
 """
 
-
         response = None
         last_error = None
+        attempt = 0
 
         for attempt in range(3):
 
@@ -180,6 +181,7 @@ Si no puedes identificar con certeza un alimento, utiliza la descripción más r
                     or "UNAVAILABLE" in error_text
                     or "429" in error_text
                 ):
+
                     if attempt == 0:
                         print("REINTENTO AUTOMÁTICO 2/3")
                         time.sleep(10)
@@ -192,11 +194,18 @@ Si no puedes identificar con certeza un alimento, utiliza la descripción más r
 
                     raise
 
-                if response is None:
-                    raise last_error
-          text = response.text.strip()
+                raise
+
+
+        if response is None:
+            raise last_error
+
+
+        text = response.text.strip()
+
 
         try:
+
             data = json.loads(text)
 
         except json.JSONDecodeError:
@@ -208,26 +217,11 @@ Si no puedes identificar con certeza un alimento, utiliza la descripción más r
                 status_code=500,
                 detail="Gemini no devolvió un JSON válido."
             )
+
 
         data["reintentos"] = attempt
+
         return data
-
-        try:
-            data = json.loads(text)
-
-        except json.JSONDecodeError:
-
-            print("RESPUESTA DE GEMINI:")
-            print(text)
-
-            raise HTTPException(
-                status_code=500,
-                detail="Gemini no devolvió un JSON válido."
-            )
-
-
-                data["reintentos"] = attempt
-                return data
 
 
     except HTTPException:
@@ -243,3 +237,5 @@ Si no puedes identificar con certeza un alimento, utiliza la descripción más r
             status_code=500,
             detail=f"Error al analizar la imagen: {str(e)}"
         )
+    
+                                        
