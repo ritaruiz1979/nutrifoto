@@ -180,7 +180,8 @@ Si no puedes identificar con certeza un alimento, utiliza la descripción más r
                                      or "UNAVAILABLE" in error_text
                                      or "429" in error_text
                                   ):
-                                     if attempt == 0:
+                                      
+if attempt == 0:
     print("REINTENTO AUTOMÁTICO 2/3")
     time.sleep(10)
     continue
@@ -213,7 +214,8 @@ if attempt == 1:
             )
 
 
-        return data
+                data["reintentos"] = attempt
+                return data
 
 
     except HTTPException:
