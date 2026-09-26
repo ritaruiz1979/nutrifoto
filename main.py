@@ -169,33 +169,31 @@ Si no puedes identificar con certeza un alimento, utiliza la descripción más r
 
                 break
 
-            except Exception as e:
+                        except Exception as e:
 
-                 last_error = e
+                last_error = e
 
-                 error_text = str(e)
+                error_text = str(e)
 
-                                 if (
-                                     "503" in error_text 
-                                     or 
-                        "UNAVAILABLE" in error_text
-                                     or
-                        "429" in error_text
-                                       ):
-                                      
-if attempt == 0:
-    print("REINTENTO AUTOMÁTICO 2/3"
-    time.sleep(10)
-    continue
-if attempt == 1:
-    print("REINTENTO AUTOMÁTICO 3/3")
-    time.sleep(20)
-    continue
-   
-                                     raise
+                if (
+                    "503" in error_text
+                    or "UNAVAILABLE" in error_text
+                    or "429" in error_text
+                ):
+                    if attempt == 0:
+                        print("REINTENTO AUTOMÁTICO 2/3")
+                        time.sleep(10)
+                        continue
 
+                    if attempt == 1:
+                        print("REINTENTO AUTOMÁTICO 3/3")
+                        time.sleep(20)
+                        continue
 
-                 if response is None:
+                    raise
+
+                if response is None:
+                    raise last_error
                      raise last_error
 
 
