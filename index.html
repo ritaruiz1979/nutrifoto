@@ -10,51 +10,43 @@
 <link rel="icon" href="icon.svg">
 <title>NutriFoto</title>
 
-<style>
 *{box-sizing:border-box}
 
 body{
-  /* ===== MEJORA VISUAL NUTRIFOTO ===== */
-
-h1 {
-  font-size: 2rem;
-  margin-bottom: 8px;
-  letter-spacing: -0.5px;
-}
-
-h2 {
-  font-size: 1.35rem;
-  margin-bottom: 12px;
-}
-
-.card {
-  border-radius: 18px;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.08);
-  border: 1px solid rgba(46,125,50,0.10);
-}
-
-button {
-  border-radius: 14px;
-  min-height: 48px;
-  font-size: 1rem;
-  font-weight: 600;
-  transition: transform 0.15s ease;
-}
-
-button:active {
-  transform: scale(0.97);
-}
   margin:0;
   font-family:system-ui,-apple-system,Segoe UI,sans-serif;
   background:#f5f7f5;
   color:#172017
 }
 
+/* ===== MEJORA VISUAL NUTRIFOTO ===== */
+
+h1{
+  font-size:2rem;
+  margin:0 0 8px;
+  letter-spacing:-0.5px
+}
+
+h2{
+  font-size:1.35rem;
+  margin:0 0 12px
+}
+
+h3{
+  margin-top:20px
+}
+
 header{
   background:#2e7d32;
   color:#fff;
-  padding:22px 18px 18px;
-  text-align:center
+  padding:26px 18px 22px;
+  text-align:center;
+  box-shadow:0 3px 12px #00000018
+}
+
+header div{
+  font-size:15px;
+  opacity:.95
 }
 
 main{
@@ -68,22 +60,30 @@ main{
   border-radius:18px;
   padding:18px;
   margin:14px 0;
-  box-shadow:0 4px 18px #00000012
+  box-shadow:0 4px 18px #00000012;
+  border:1px solid #2e7d3218
 }
 
 button{
   border:0;
   border-radius:14px;
   padding:14px 18px;
+  min-height:48px;
   font-size:16px;
   font-weight:700;
-  cursor:pointer
+  cursor:pointer;
+  transition:transform .15s ease,box-shadow .15s ease
+}
+
+button:active{
+  transform:scale(.97)
 }
 
 .primary{
   background:#2e7d32;
   color:#fff;
-  width:100%
+  width:100%;
+  box-shadow:0 4px 10px #2e7d3230
 }
 
 .secondary{
@@ -116,12 +116,14 @@ input[type=file]{
   background:#f1f6f1;
   border-radius:14px;
   padding:14px;
-  margin-bottom:10px
+  margin-bottom:10px;
+  border:1px solid #2e7d3210
 }
 
 .metric b{
   font-size:24px;
-  display:block
+  display:block;
+  margin-top:3px
 }
 
 .muted{
@@ -134,7 +136,7 @@ input[type=file]{
 }
 
 .food{
-  padding:10px 0;
+  padding:12px 0;
   border-bottom:1px solid #eee
 }
 
@@ -149,7 +151,6 @@ input[type=file]{
 .install{
   display:none
 }
-</style>
 </head>
 
 <body>
