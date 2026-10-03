@@ -713,26 +713,14 @@ analyze.addEventListener('click', async () => {
 
     /* MOSTRAR RESULTADOS */
 
-    document.getElementById('carbs').textContent =
-      hidratosTotales.toFixed(1);
-
-    document.getElementById('ugp').textContent =
-      ugp.toFixed(2);
-
-    document.getElementById('kcal').textContent =
-      data.totales.calorias ?? '—';
-
     document.getElementById('protein').textContent =
-      data.totales.proteinas_g ?? '—';
+  data.totales.proteinas_g ?? '—';
 
-    document.getElementById('fat').textContent =
-      data.totales.grasas_g ?? '—';
+document.getElementById('fat').textContent =
+  data.totales.grasas_g ?? '—';
 
-    document.getElementById('fiber').textContent =
-      data.totales.fibra_g ?? '—';
-
-    document.getElementById('sugar').textContent =
-      data.totales.azucares_g ?? '—';
+document.getElementById('sugar').textContent =
+  data.totales.azucares_g ?? '—';
 
 
     /* ALIMENTOS */
