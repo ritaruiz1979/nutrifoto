@@ -79,6 +79,14 @@ button{
 
 button:active{
   transform:scale(.97)
+  @keyframes analizarPulso{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(.97)}
+}
+
+.analyzing{
+  animation:analizarPulso 1s ease-in-out infinite;
+}
 }
 button:hover{
   transform:translateY(-1px);
@@ -643,6 +651,8 @@ analyze.addEventListener('click', async () => {
     '🔎 Analizando tu plato…';
 
   analyze.disabled = true;
+  analyze.classList.add('analyzing');
+analyze.textContent = '🔎 Analizando…';
 
 
   try {
@@ -851,6 +861,8 @@ document.getElementById('sugar').textContent =
   } finally {
 
     analyze.disabled = false;
+analyze.classList.remove('analyzing');
+analyze.textContent = '🔎 Analizar plato';
 
   }
 
