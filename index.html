@@ -9,8 +9,12 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg">
 <title>NutriFoto</title>
+
 <style>
-*{box-sizing:border-box}
+
+*{
+  box-sizing:border-box
+}
 
 body{
   margin:0;
@@ -27,6 +31,7 @@ h1{
   letter-spacing:-0.8px;
   font-weight:800
 }
+
 h2{
   font-size:1.45rem;
   margin:0 0 14px;
@@ -39,7 +44,8 @@ h3{
 
 header{
   background:linear-gradient(135deg,#2e7d32,#43a047);
-  color:#fff;padding:45px 18px 38px;
+  color:#fff;
+  padding:45px 18px 38px;
   text-align:center;
   border-radius:0 0 24px 24px;
   box-shadow:0 4px 14px #00000020
@@ -79,15 +85,24 @@ button{
 
 button:active{
   transform:scale(.97)
-  @keyframes analizarPulso{
-  0%,100%{transform:scale(1)}
-  50%{transform:scale(.97)}
+}
+
+/* ANIMACIÓN DEL BOTÓN ANALIZAR */
+
+@keyframes analizarPulso{
+  0%,100%{
+    transform:scale(1)
+  }
+
+  50%{
+    transform:scale(.97)
+  }
 }
 
 .analyzing{
   animation:analizarPulso 1s ease-in-out infinite;
 }
-}
+
 button:hover{
   transform:translateY(-1px);
   box-shadow:0 6px 14px #00000018;
@@ -148,7 +163,24 @@ input[type=file]{
 }
 
 #results{
-  display:none
+  display:none;
+
+  /* ANIMACIÓN DE RESULTADOS */
+  animation:aparecerResultados .5s ease-out;
+}
+
+@keyframes aparecerResultados{
+
+  from{
+    opacity:0;
+    transform:translateY(12px);
+  }
+
+  to{
+    opacity:1;
+    transform:translateY(0);
+  }
+
 }
 
 .food{
@@ -167,8 +199,10 @@ input[type=file]{
 .install{
   display:none
 }
+
 </style>
 </head>
+
 <body>
 
 <header>
@@ -255,8 +289,6 @@ input[type=file]{
     <span class="small">unidades</span>
   </div>
 
-  
-
   <div class="metric">
     Proteínas
     <b id="protein">—</b>
@@ -268,8 +300,6 @@ input[type=file]{
     <b id="fat">—</b>
     <span class="small">g</span>
   </div>
-
-  
 
   <div class="metric">
     Azúcares
@@ -368,55 +398,56 @@ historyButton.addEventListener('click', () => {
   } else {
 
     historyList.innerHTML =
-  historial.map((item, index) => `
+      historial.map((item, index) => `
 
-    <div class="food">
+        <div class="food">
 
-      ${
-        item.foto
-          ? `<img
-              src="${item.foto}"
-              alt="Foto del plato"
-              style="width:100%;max-height:220px;object-fit:cover;border-radius:14px;margin-bottom:10px"
-            >`
-          : ''
-      }
+          ${
+            item.foto
+              ? `<img
+                  src="${item.foto}"
+                  alt="Foto del plato"
+                  style="width:100%;max-height:220px;object-fit:cover;border-radius:14px;margin-bottom:10px"
+                >`
+              : ''
+          }
 
-      <b>📅 ${item.fecha}</b><br>
+          <b>📅 ${item.fecha}</b><br>
 
-      <span class="muted">
-        Hidratos: ${item.hidratos} g ·
-        UGP: ${item.ugp} ·
-        Calorías: ${item.calorias} kcal
-      </span>
+          <span class="muted">
+            Hidratos: ${item.hidratos} g ·
+            UGP: ${item.ugp} ·
+            Calorías: ${item.calorias} kcal
+          </span>
 
-      <button
-        class="secondary"
-        style="margin-top:10px"
-        onclick="borrarHistorial(${index})"
-      >
-        🗑️ Borrar
-      </button>
+          <button
+            class="secondary"
+            style="margin-top:10px"
+            onclick="borrarHistorial(${index})"
+          >
+            🗑️ Borrar
+          </button>
 
-    </div>
+        </div>
 
-  `).join('');
+      `).join('');
   }
 
   history.style.display = 'block';
 
   history.scrollIntoView({
-    behavior: 'smooth'
+    behavior:'smooth'
   });
 
 });
 
-function borrarHistorial(index) {
+
+function borrarHistorial(index){
 
   const confirmar =
     confirm('¿Quieres borrar este análisis del historial?');
 
-  if (!confirmar) {
+  if (!confirmar){
     return;
   }
 
@@ -424,7 +455,7 @@ function borrarHistorial(index) {
     localStorage.getItem('nutrifotoHistorial') || '[]'
   );
 
-  historial.splice(index, 1);
+  historial.splice(index,1);
 
   localStorage.setItem(
     'nutrifotoHistorial',
@@ -434,11 +465,13 @@ function borrarHistorial(index) {
   historyButton.click();
 
 }
+
+
 /* FOTO DESDE CÁMARA */
 
 camera.addEventListener('change', () => {
 
-  if (camera.files.length > 0) {
+  if (camera.files.length > 0){
 
     selectedFile = camera.files[0];
 
@@ -453,7 +486,7 @@ camera.addEventListener('change', () => {
 
 gallery.addEventListener('change', () => {
 
-  if (gallery.files.length > 0) {
+  if (gallery.files.length > 0){
 
     selectedFile = gallery.files[0];
 
@@ -466,7 +499,7 @@ gallery.addEventListener('change', () => {
 
 /* PREPARAR FOTO */
 
-function preparePhoto() {
+function preparePhoto(){
 
   preview.src =
     URL.createObjectURL(selectedFile);
@@ -485,14 +518,14 @@ function preparePhoto() {
 
 /* CREAR MINIATURA PARA HISTORIAL */
 
-async function createThumbnail(file) {
+async function createThumbnail(file){
 
   const img = new Image();
 
   const imageUrl =
     URL.createObjectURL(file);
 
-  await new Promise((resolve, reject) => {
+  await new Promise((resolve,reject) => {
 
     img.onload = resolve;
     img.onerror = reject;
@@ -505,9 +538,9 @@ async function createThumbnail(file) {
   let width = img.width;
   let height = img.height;
 
-  if (width > height) {
+  if (width > height){
 
-    if (width > maxSize) {
+    if (width > maxSize){
 
       height =
         Math.round(height * maxSize / width);
@@ -518,7 +551,7 @@ async function createThumbnail(file) {
 
   } else {
 
-    if (height > maxSize) {
+    if (height > maxSize){
 
       width =
         Math.round(width * maxSize / height);
@@ -558,14 +591,14 @@ async function createThumbnail(file) {
 
 /* COMPRIMIR FOTO PARA EL ANÁLISIS */
 
-async function compressImage(file) {
+async function compressImage(file){
 
   const img = new Image();
 
   const imageUrl =
     URL.createObjectURL(file);
 
-  await new Promise((resolve, reject) => {
+  await new Promise((resolve,reject) => {
 
     img.onload = resolve;
     img.onerror = reject;
@@ -578,9 +611,9 @@ async function compressImage(file) {
   let width = img.width;
   let height = img.height;
 
-  if (width > height) {
+  if (width > height){
 
-    if (width > maxSize) {
+    if (width > maxSize){
 
       height =
         Math.round(height * maxSize / width);
@@ -591,7 +624,7 @@ async function compressImage(file) {
 
   } else {
 
-    if (height > maxSize) {
+    if (height > maxSize){
 
       width =
         Math.round(width * maxSize / height);
@@ -638,7 +671,7 @@ async function compressImage(file) {
 
 analyze.addEventListener('click', async () => {
 
-  if (!selectedFile) {
+  if (!selectedFile){
 
     status.textContent =
       'Primero haz una foto o selecciona una imagen.';
@@ -651,11 +684,14 @@ analyze.addEventListener('click', async () => {
     '🔎 Analizando tu plato…';
 
   analyze.disabled = true;
+
   analyze.classList.add('analyzing');
-analyze.textContent = '🔎 Analizando…';
+
+  analyze.textContent =
+    '🔎 Analizando…';
 
 
-  try {
+  try{
 
     const compressedFile =
       await compressImage(selectedFile);
@@ -675,13 +711,13 @@ analyze.textContent = '🔎 Analizando…';
       await fetch(
         'https://nutrifoto-t07h.onrender.com/analyze',
         {
-          method: 'POST',
-          body: formData
+          method:'POST',
+          body:formData
         }
       );
 
 
-    if (!response.ok) {
+    if (!response.ok){
 
       throw new Error(
         'El servidor no ha podido analizar la imagen.'
@@ -723,23 +759,23 @@ analyze.textContent = '🔎 Analizando…';
 
     /* MOSTRAR RESULTADOS */
 
-document.getElementById('carbs').textContent =
-  hidratosTotales.toFixed(1);
+    document.getElementById('carbs').textContent =
+      hidratosTotales.toFixed(1);
 
-document.getElementById('ugp').textContent =
-  ugp.toFixed(2);
+    document.getElementById('ugp').textContent =
+      ugp.toFixed(2);
 
-document.getElementById('protein').textContent =
-  data.totales.proteinas_g ?? '—';
+    document.getElementById('protein').textContent =
+      data.totales.proteinas_g ?? '—';
 
-document.getElementById('fat').textContent =
-  data.totales.grasas_g ?? '—';
+    document.getElementById('fat').textContent =
+      data.totales.grasas_g ?? '—';
 
-document.getElementById('sugar').textContent =
-  data.totales.azucares_g ?? '—';
+    document.getElementById('sugar').textContent =
+      data.totales.azucares_g ?? '—';
 
 
-/* ALIMENTOS */
+    /* ALIMENTOS */
 
     const foods =
       document.getElementById('foods');
@@ -769,12 +805,14 @@ document.getElementById('sugar').textContent =
         .join('');
 
 
+    /* MOSTRAR RESULTADOS */
+
     results.style.display = 'block';
 
 
     /* MENSAJE DE ESTADO */
 
-    if (data.reintentos === 0) {
+    if (data.reintentos === 0){
 
       status.textContent =
         '✅ Análisis terminado. Sin reintentos. Los valores son estimaciones.';
@@ -843,11 +881,11 @@ document.getElementById('sugar').textContent =
 
 
     results.scrollIntoView({
-      behavior: 'smooth'
+      behavior:'smooth'
     });
 
 
-  } catch (error) {
+  } catch(error){
 
     console.error(error);
 
@@ -858,11 +896,14 @@ document.getElementById('sugar').textContent =
         'No se ha podido conectar con el servidor.'
       );
 
-  } finally {
+  } finally{
 
     analyze.disabled = false;
-analyze.classList.remove('analyzing');
-analyze.textContent = '🔎 Analizar plato';
+
+    analyze.classList.remove('analyzing');
+
+    analyze.textContent =
+      '🔎 Analizar plato';
 
   }
 
@@ -871,7 +912,7 @@ analyze.textContent = '🔎 Analizar plato';
 
 /* SERVICE WORKER */
 
-if ('serviceWorker' in navigator) {
+if ('serviceWorker' in navigator){
 
   navigator.serviceWorker
     .register('sw.js')
