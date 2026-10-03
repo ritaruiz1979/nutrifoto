@@ -713,7 +713,13 @@ analyze.addEventListener('click', async () => {
 
     /* MOSTRAR RESULTADOS */
 
-    document.getElementById('protein').textContent =
+document.getElementById('carbs').textContent =
+  hidratosTotales.toFixed(1);
+
+document.getElementById('ugp').textContent =
+  ugp.toFixed(2);
+
+document.getElementById('protein').textContent =
   data.totales.proteinas_g ?? '—';
 
 document.getElementById('fat').textContent =
@@ -723,7 +729,7 @@ document.getElementById('sugar').textContent =
   data.totales.azucares_g ?? '—';
 
 
-    /* ALIMENTOS */
+/* ALIMENTOS */
 
     const foods =
       document.getElementById('foods');
