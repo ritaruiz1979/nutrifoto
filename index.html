@@ -1042,19 +1042,64 @@ document.getElementById('calcularPesoPlato')
       'Valores ajustados al peso indicado. Siguen siendo estimaciones.';
   });
 
+
 document.getElementById('quitarPesoPlato')
   .addEventListener('click', () => {
+
     document.getElementById('pesoPlato').value = '';
-    document.getElement
+
+    if (!ultimoAnalisis) {
+      document.getElementById('mensajePesoPlato').textContent =
+        'Primero haz una foto y analiza el plato.';
+      return;
+    }
+
+    const data = ultimoAnalisis;
+
+    document.getElementById('carbs').textContent =
+      ((Number(data.totales.hidratos_g) || 0) +
+      (((Number(data.totales.grasas_g) || 0) * 9 +
+      (Number(data.totales.proteinas_g) || 0) * 4) / 150) * 10)
+      .toFixed(1);
+
+    document.getElementById('ugp').textContent =
+      (((Number(data.totales.grasas_g) || 0) * 9 +
+      (Number(data.totales.proteinas_g) || 0) * 4) / 150)
+      .toFixed(2);
+
+    document.getElementById('protein').textContent =
+      (Number(data.totales.proteinas_g) || 0).toFixed(1);
+
+    document.getElementById('fat').textContent =
+      (Number(data.totales.grasas_g) || 0).toFixed(1);
+
+    document.getElementById('sugar').textContent =
+      (Number(data.totales.azucares_g) || 0).toFixed(1);
+
+    document.getElementById('foods').innerHTML =
+      (data.alimentos || []).map(food => `
+        <div class="food">
+          <b>${food.nombre ?? 'Alimento'}</b><br>
+          <span class="muted">
+            ${(Number(food.cantidad_g) || 0).toFixed(1)} g ·
+            ${(Number(food.hidratos_g) || 0).toFixed(1)} g hidratos ·
+            ${(Number(food.calorias) || 0).toFixed(0)} kcal
+          </span>
+        </div>
+      `).join('');
+
+    document.getElementById('mensajePesoPlato').textContent =
+      'Se muestran de nuevo las estimaciones originales de la foto.';
+  });
+
 /* SERVICE WORKER */
 
-if ('serviceWorker' in navigator){
-
+if ('serviceWorker' in navigator) {
   navigator.serviceWorker
     .register('sw.js')
     .catch(() => {});
-
 }
+
 
 </script>
 
