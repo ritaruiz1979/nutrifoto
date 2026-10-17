@@ -317,6 +317,29 @@ input[type=file]{
 
 
 <section id="results" class="card">
+  
+  <div class="metric" id="pesoPlatoCard">
+    <label for="pesoPlato">⚖️ Peso real de todo el plato (gramos)</label>
+    <input
+      id="pesoPlato"
+      type="number"
+      min="1"
+      step="1"
+      inputmode="numeric"
+      placeholder="Ej. 350"
+      style="width:100%;padding:14px;border:2px solid #b7e4c7;border-radius:12px;font-size:16px"
+    >
+    <button type="button" id="calcularPesoPlato" class="primary" style="margin-top:10px">
+      🧮 Calcular con mi peso
+    </button>
+    <button type="button" id="quitarPesoPlato" class="secondary">
+      ↩️ Volver al cálculo automático
+    </button>
+    <p class="muted" id="mensajePesoPlato">
+      Introduce el peso total del plato sin el recipiente.
+    </p>
+  </div>
+
 
   <h2>📊 Resultado estimado</h2>
   
