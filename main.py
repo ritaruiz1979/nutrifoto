@@ -3,7 +3,7 @@ import base64
 import json
 import time
 
-from fastapi import FastAPI, File, UploadFile, HTTPException
+from fastapi import FastAPI, File, UploadFile, HTTPException, Form
 from fastapi.middleware.cors import CORSMiddleware
 from google import genai
 from google.genai import types
@@ -39,7 +39,10 @@ def home():
 
 
 @app.post("/analyze")
-async def analyze(file: UploadFile = File(...)):
+async def analyze(
+    file: UploadFile = File(...),
+    peso_total_g: float = Form(None)
+):
 
     try:
 
@@ -72,6 +75,21 @@ Los valores nutricionales son estimaciones basadas en la imagen.
 Responde en español.
 
 Si no puedes identificar con certeza un alimento, utiliza la descripción más razonable posible.
+"""
+        if peso_total_g is not None and peso_total_g > 0:
+    prompt += f"""
+
+El usuario indica que el peso TOTAL de la comida del plato es {peso_total_g:.0f} gramos.
+
+Identifica por separado todos los ingredientes visibles, incluyendo el arroz, marisco, otros ingredientes y el caldo o líquido si lo hay.
+
+Estima la cantidad en gramos de cada ingrediente procurando que la suma de todas las cantidades sea igual al peso total indicado de {peso_total_g:.0f} gramos.
+
+No incluyas el peso del plato o recipiente.
+
+Calcula las calorías, proteínas, hidratos y grasas de cada ingrediente según las cantidades estimadas y después calcula los totales.
+
+Los valores nutricionales son aproximados.
 """
 
         response = None
@@ -207,6 +225,44 @@ Si no puedes identificar con certeza un alimento, utiliza la descripción más r
         try:
 
             data = json.loads(text)
+                    if peso_total_g is not None and peso_total_g > 0:
+            alimentos = data.get("alimentos", [])
+            peso_estimado = sum(
+                max(0, float(a.get("cantidad_g", 0) or 0))
+                for a in alimentos
+            )
+
+            if alimentos and peso_estimado > 0:
+                factor = peso_total_g / peso_estimado
+
+                for alimento in alimentos:
+                    for campo in (
+                        "cantidad_g",
+                        "calorias",
+                        "proteinas_g",
+                        "hidratos_g",
+                        "grasas_g"
+                    ):
+                        alimento[campo] = round(
+                            float(alimento.get(campo, 0) or 0) * factor,
+                            2
+                        )
+
+                data["totales"] = {
+                    campo: round(
+                        sum(
+                            float(a.get(campo, 0) or 0)
+                            for a in alimentos
+                        ),
+                        2
+                    )
+                    for campo in (
+                        "calorias",
+                        "proteinas_g",
+                        "hidratos_g",
+                        "grasas_g"
+                    )
+                }
 
         except json.JSONDecodeError:
 
