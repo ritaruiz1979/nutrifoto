@@ -965,5 +965,115 @@ if ('serviceWorker' in navigator){
 
 </script>
 
+<script>
+(function () {
+  const foods = {
+    "Arroz blanco cocido": [28.0, 130, 2.7, 0.3],
+    "Pasta cocida": [25.0, 158, 5.8, 0.9],
+    "Patata cocida": [17.0, 87, 1.9, 0.1],
+    "Pan blanco": [49.0, 265, 8.5, 3.2],
+    "Pan integral": [41.0, 247, 13.0, 4.2],
+    "Lentejas cocidas": [12.0, 116, 9.0, 0.4],
+    "Garbanzos cocidos": [19.0, 164, 8.9, 2.6],
+    "Manzana": [12.0, 52, 0.3, 0.2],
+    "Plátano": [20.0, 89, 1.1, 0.3],
+    "Naranja": [9.0, 47, 0.9, 0.1],
+    "Leche entera": [4.8, 61, 3.2, 3.3],
+    "Yogur natural": [4.7, 61, 3.5, 3.3],
+    "Pollo": [0, 165, 31.0, 3.6],
+    "Merluza": [0, 90, 17.0, 2.0],
+    "Huevo": [0.7, 143, 12.6, 9.5],
+    "Tomate": [3.9, 18, 0.9, 0.2],
+    "Calabacín": [2.1, 17, 1.2, 0.3],
+    "Aceite de oliva": [0, 884, 0, 100]
+  };
+
+  const select = document.getElementById("gramFood");
+  const amount = document.getElementById("gramAmount");
+  const list = document.getElementById("gramFoodList");
+  const addButton = document.getElementById("addGramFood");
+  const clearButton = document.getElementById("clearGramFoods");
+
+  if (!select || !amount || !list || !addButton || !clearButton) return;
+
+  Object.keys(foods).forEach(function (name) {
+    const option = document.createElement("option");
+    option.value = name;
+    option.textContent = name;
+    select.appendChild(option);
+  });
+
+  let items = [];
+
+  function render() {
+    list.replaceChildren();
+
+    let carbs = 0;
+    let calories = 0;
+    let protein = 0;
+    let fat = 0;
+
+    items.forEach(function (item, index) {
+      const values = foods[item.name];
+      const factor = item.grams / 100;
+
+      carbs += values[0] * factor;
+      calories += values[1] * factor;
+      protein += values[2] * factor;
+      fat += values[3] * factor;
+
+      const line = document.createElement("p");
+      line.textContent = item.name + " — " + item.grams +
+        " g ";
+
+      const remove = document.createElement("button");
+      remove.type = "button";
+      remove.textContent = "Quitar";
+      remove.addEventListener("click", function () {
+        items.splice(index, 1);
+        render();
+      });
+
+      line.appendChild(remove);
+      list.appendChild(line);
+    });
+
+    const ugp = (fat * 9 + protein * 4) / 150;
+
+    document.getElementById("gramCarbs").textContent =
+      (carbs + ugp * 10).toFixed(1) + " g";
+    document.getElementById("gramUGP").textContent =
+      ugp.toFixed(2);
+    document.getElementById("gramCalories").textContent =
+      Math.round(calories) + " kcal";
+    document.getElementById("gramProtein").textContent =
+      protein.toFixed(1) + " g";
+    document.getElementById("gramFat").textContent =
+      fat.toFixed(1) + " g";
+  }
+
+  addButton.addEventListener("click", function () {
+    const name = select.value;
+    const grams = Number(amount.value);
+
+    if (!name || !Number.isFinite(grams) || grams <= 0) {
+      alert("Elige un alimento e indica los gramos.");
+      return;
+    }
+
+    items.push({ name: name, grams: grams });
+    amount.value = "";
+    render();
+  });
+
+  clearButton.addEventListener("click", function () {
+    items = [];
+    render();
+  });
+
+  render();
+})();
+</script>
+
 </body>
 </html>
