@@ -860,6 +860,16 @@ analyze.addEventListener('click', async () => {
       compressedFile,
       'nutrifoto.jpg'
     );
+        const pesoPlato = Number(
+      document.getElementById('pesoPlato').value
+    );
+
+    if (Number.isFinite(pesoPlato) && pesoPlato > 0) {
+      formData.append(
+        'peso_total_g',
+        String(pesoPlato)
+      );
+    }
 
 
     const response =
