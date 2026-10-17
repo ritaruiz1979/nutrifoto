@@ -42,13 +42,14 @@ h3{
   margin-top:20px
 }
 
+
 header{
-  background:linear-gradient(135deg,#2e7d32,#43a047);
+  background:linear-gradient(135deg,#26a69a,#66bb6a,#a5d66a);
   color:#fff;
-  padding:45px 18px 38px;
+  padding:38px 18px 34px;
   text-align:center;
-  border-radius:0 0 24px 24px;
-  box-shadow:0 4px 14px #00000020
+  border-radius:0 0 30px 30px;
+  box-shadow:0 6px 18px #2e7d3226;
 }
 
 header div{
@@ -63,25 +64,32 @@ main{
   padding:18px
 }
 
+
 .card{
-  background:#fff;
-  border-radius:20px;
+  background:linear-gradient(145deg,#ffffff,#f3fff5);
+  border-radius:22px;
   padding:20px;
   margin:16px 0;
-  box-shadow:0 5px 20px #00000014;
-  border:1px solid #2e7d3218
+  box-shadow:0 6px 20px #2e7d3218;
+  border:1px solid #a5d6a740;
 }
+
+
 
 button{
   border:0;
-  border-radius:16px;
+  border-radius:18px;
   padding:15px 18px;
   min-height:50px;
   font-size:16px;
   font-weight:700;
   cursor:pointer;
+  color:#fff;
+  background:linear-gradient(135deg,#43a047,#26a69a);
+  box-shadow:0 4px 10px #2e7d3226;
   transition:transform .15s ease,box-shadow .15s ease;
 }
+
 
 button:active{
   transform:scale(.97)
@@ -198,6 +206,97 @@ input[type=file]{
 
 .install{
   display:none
+}
+
+/* CALCULADORA POR GRAMOS: ESTILO COLORIDO */
+#gramsCalculator h2{
+  color:#218c53;
+  font-weight:800;
+}
+
+#gramsCalculator h3{
+  color:#e58a26;
+  margin-top:22px;
+}
+
+#gramsCalculator label{
+  display:block;
+  margin:14px 0 7px;
+  color:#28784b;
+  font-weight:700;
+}
+
+#gramsCalculator select,
+#gramsCalculator input[type="number"]{
+  width:100%;
+  box-sizing:border-box;
+  min-height:48px;
+  padding:12px 14px;
+  border:2px solid #b7e4c7;
+  border-radius:14px;
+  background:#f6fff8;
+  color:#245b3a;
+  font-size:16px;
+  margin-bottom:10px;
+}
+
+#gramsCalculator select:focus,
+#gramsCalculator input[type="number"]:focus{
+  outline:2px solid #66bb6a;
+  border-color:#26a69a;
+}
+
+#gramsCalculator #gramFoodList p{
+  background:#fff4df;
+  border:1px solid #ffe0a6;
+  border-radius:12px;
+  padding:10px;
+  color:#62451c;
+}
+
+#gramsCalculator #gramCarbs,
+#gramsCalculator #gramUGP,
+#gramsCalculator #gramCalories,
+#gramsCalculator #gramProtein,
+#gramsCalculator #gramFat{
+  color:#218c53;
+  font-weight:800;
+}
+
+/* HISTORIAL: ESTILO COLORIDO */
+#historyList{
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+
+#historyList .food{
+  background:linear-gradient(135deg,#f1fff4,#fff8e8);
+  border:1px solid #b7e4c7;
+  border-radius:18px;
+  padding:15px;
+  margin:0;
+  box-shadow:0 4px 12px #2e7d3212;
+}
+
+#historyList .food h3,
+#historyList .food strong{
+  color:#218c53;
+}
+
+#historyList .food p{
+  line-height:1.5;
+}
+
+#historyList .food button{
+  margin-top:8px;
+}
+
+#historyList .muted{
+  background:#f3f8ff;
+  border-radius:14px;
+  padding:14px;
+  color:#55708a;
 }
 
 </style>
