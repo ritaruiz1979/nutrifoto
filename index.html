@@ -981,7 +981,71 @@ analyze.addEventListener('click', async () => {
 
 });
 
+/* BOTONES DE PESO DEL PLATO */
 
+document.getElementById('calcularPesoPlato')
+  .addEventListener('click', () => {
+    if (!ultimoAnalisis) {
+      document.getElementById('mensajePesoPlato').textContent =
+        'Primero haz una foto y analiza el plato.';
+      return;
+    }
+
+    const peso = Number(
+      document.getElementById('pesoPlato').value
+    );
+
+    const pesoEstimado = (ultimoAnalisis.alimentos || [])
+      .reduce((suma, alimento) =>
+        suma + (Number(alimento.cantidad_g) || 0), 0);
+
+    if (peso <= 0 || pesoEstimado <= 0) {
+      document.getElementById('mensajePesoPlato').textContent =
+        'Introduce un peso en gramos válido.';
+      return;
+    }
+
+    const factor = peso / pesoEstimado;
+    const data = ultimoAnalisis;
+
+    const hidratos =
+      (Number(data.totales.hidratos_g) || 0) * factor;
+    const proteinas =
+      (Number(data.totales.proteinas_g) || 0) * factor;
+    const grasas =
+      (Number(data.totales.grasas_g) || 0) * factor;
+    const azucares =
+      (Number(data.totales.azucares_g) || 0) * factor;
+
+    const ugp = (grasas * 9 + proteinas * 4) / 150;
+
+    document.getElementById('carbs').textContent =
+      (hidratos + ugp * 10).toFixed(1);
+    document.getElementById('ugp').textContent = ugp.toFixed(2);
+    document.getElementById('protein').textContent = proteinas.toFixed(1);
+    document.getElementById('fat').textContent = grasas.toFixed(1);
+    document.getElementById('sugar').textContent = azucares.toFixed(1);
+
+    document.getElementById('foods').innerHTML =
+      (data.alimentos || []).map(food => `
+        <div class="food">
+          <b>${food.nombre ?? 'Alimento'}</b><br>
+          <span class="muted">
+            ${((Number(food.cantidad_g) || 0) * factor).toFixed(1)} g ·
+            ${((Number(food.hidratos_g) || 0) * factor).toFixed(1)} g hidratos ·
+            ${((Number(food.calorias) || 0) * factor).toFixed(0)} kcal
+          </span>
+        </div>
+      `).join('');
+
+    document.getElementById('mensajePesoPlato').textContent =
+      'Valores ajustados al peso indicado. Siguen siendo estimaciones.';
+  });
+
+document.getElementById('quitarPesoPlato')
+  .addEventListener('click', () => {
+    document.getElementById('pesoPlato').value = '';
+    document.getElement
 /* SERVICE WORKER */
 
 if ('serviceWorker' in navigator){
