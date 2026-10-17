@@ -98,89 +98,48 @@ Los valores nutricionales son aproximados.
 
         for attempt in range(3):
 
-            try:
+                    try:
+            data = json.loads(text)
 
-                response = client.models.generate_content(
-                    model="gemini-3.6-flash",
+            if peso_total_g is not None and peso_total_g > 0:
+                alimentos = data.get("alimentos", [])
 
-                    contents=[
-                        {
-                            "inline_data": {
-                                "mime_type": mime_type,
-                                "data": base64.b64encode(
-                                    image_bytes
-                                ).decode("utf-8")
-                            }
-                        },
-                        prompt
-                    ],
+                peso_estimado = sum(
+                    max(0, float(a.get("cantidad_g", 0) or 0))
+                    for a in alimentos
+                )
 
-                    config=types.GenerateContentConfig(
-                        response_mime_type="application/json",
-                        response_schema={
-                            "type": "object",
-                            "properties": {
-                                "alimentos": {
-                                    "type": "array",
-                                    "items": {
-                                        "type": "object",
-                                        "properties": {
-                                            "nombre": {
-                                                "type": "string"
-                                            },
-                                            "cantidad_g": {
-                                                "type": "number"
-                                            },
-                                            "calorias": {
-                                                "type": "number"
-                                            },
-                                            "proteinas_g": {
-                                                "type": "number"
-                                            },
-                                            "hidratos_g": {
-                                                "type": "number"
-                                            },
-                                            "grasas_g": {
-                                                "type": "number"
-                                            }
-                                        },
-                                        "required": [
-                                            "nombre",
-                                            "cantidad_g",
-                                            "calorias",
-                                            "proteinas_g",
-                                            "hidratos_g",
-                                            "grasas_g"
-                                        ]
-                                    }
-                                },
-                                "totales": {
-                                    "type": "object",
-                                    "properties": {
-                                        "calorias": {
-                                            "type": "number"
-                                        },
-                                        "proteinas_g": {
-                                            "type": "number"
-                                        },
-                                        "hidratos_g": {
-                                            "type": "number"
-                                        },
-                                        "grasas_g": {
-                                            "type": "number"
-                                        }
-                                    },
-                                    "required": [
-                                        "calorias",
-                                        "proteinas_g",
-                                        "hidratos_g",
-                                        "grasas_g"
-                                    ]
-                                }
-                            },
-                            "required": [
-                                "alimentos",
-                                "totales"
+                if alimentos and peso_estimado > 0:
+                    factor = peso_total_g / peso_estimado
+
+                    for alimento in alimentos:
+                        for campo in (
+                            "cantidad_g",
+                            "calorias",
+                            "proteinas_g",
+                            "hidratos_g",
+                            "grasas_g"
+                        ):
+                            alimento[campo] = round(
+                                float(alimento.get(campo, 0) or 0) * factor,
+                                2
+                            )
+
+                    data["totales"] = {
+                        campo: round(
+                            sum(
+                                float(a.get(campo, 0) or 0)
+                                for a in alimentos
+                            ),
+                            2
+                        )
+                        for campo in (
+                            "calorias",
+                            "proteinas_g",
+                            "hidratos_g",
+                            "grasas_g"
+                        )
+                    }
                             ]
                         }
                     )
@@ -264,7 +223,7 @@ Los valores nutricionales son aproximados.
                     )
                 }
 
-        except json.JSONDecodeError:
+          except json.JSONDecodeError:
 
             print("RESPUESTA DE GEMINI:")
             print(text)
