@@ -319,6 +319,29 @@ input[type=file]{
 <section id="results" class="card">
 
   <h2>📊 Resultado estimado</h2>
+  
+  <div class="metric" id="pesoPlatoCard">
+    <label for="pesoPlato">⚖️ Peso real de todo el plato (opcional)</label>
+    <input
+      id="pesoPlato"
+      type="number"
+      min="1"
+      step="1"
+      inputmode="numeric"
+      placeholder="Introduce los gramos, por ejemplo 350"
+      style="width:100%;padding:14px;border:2px solid #b7e4c7;border-radius:12px;font-size:16px"
+    >
+    <button type="button" id="calcularPesoPlato" class="primary" style="margin-top:10px">
+      🧮 Calcular con mi peso
+    </button>
+    <button type="button" id="quitarPesoPlato" class="secondary">
+      ↩️ Volver al cálculo automático
+    </button>
+    <p class="muted" id="mensajePesoPlato">
+      Si dejas el peso vacío, se mantienen los resultados automáticos de la foto.
+    </p>
+  </div>
+
 
   <div class="metric">
     Hidratos totales
@@ -406,6 +429,7 @@ const results =
   document.getElementById('results');
 
 let selectedFile = null;
+let ultimoAnalisis = null;
 
 
 /* BOTÓN CÁMARA */
@@ -771,34 +795,41 @@ analyze.addEventListener('click', async () => {
 
     const data =
       await response.json();
-
-
+      ultimoAnalisis = data;  
+  
     /* DATOS NUTRICIONALES */
 
+    
+    /* DATOS NUTRICIONALES Y PESO DEL PLATO */
+
+    const factorPeso = Number(
+      document.getElementById('pesoPlato')?.value
+    ) > 0
+      ? Number(document.getElementById('pesoPlato').value) /
+        (data.alimentos || []).reduce(
+          (suma, alimento) => suma + (Number(alimento.cantidad_g) || 0), 0
+        )
+      : 1;
+
     const hidratos =
-      Number(data.totales.hidratos_g) || 0;
+      (Number(data.totales.hidratos_g) || 0) * factorPeso;
 
     const proteinas =
-      Number(data.totales.proteinas_g) || 0;
+      (Number(data.totales.proteinas_g) || 0) * factorPeso;
 
     const grasas =
-      Number(data.totales.grasas_g) || 0;
+      (Number(data.totales.grasas_g) || 0) * factorPeso;
 
+    const azucares =
+      (Number(data.totales.azucares_g) || 0) * factorPeso;
 
     /* CALCULAR UGP */
 
-    const ugp =
-      (grasas * 9 + proteinas * 4) / 150;
-
+    const ugp = (grasas * 9 + proteinas * 4) / 150;
 
     /* AÑADIR UGP A LOS HIDRATOS */
 
-    const hidratosUGP =
-      ugp * 10;
-
-    const hidratosTotales =
-      hidratos + hidratosUGP;
-
+    const hidratosTotales = hidratos + ugp * 10;
 
     /* MOSTRAR RESULTADOS */
 
@@ -809,13 +840,13 @@ analyze.addEventListener('click', async () => {
       ugp.toFixed(2);
 
     document.getElementById('protein').textContent =
-      data.totales.proteinas_g ?? '—';
+      proteinas.toFixed(1);
 
     document.getElementById('fat').textContent =
-      data.totales.grasas_g ?? '—';
+      grasas.toFixed(1);
 
     document.getElementById('sugar').textContent =
-      data.totales.azucares_g ?? '—';
+      azucares.toFixed(1);
 
 
     /* ALIMENTOS */
@@ -834,11 +865,9 @@ analyze.addEventListener('click', async () => {
 
             <span class="muted">
 
-              ${food.cantidad_g ?? 0} g ·
-
-              ${food.hidratos_g ?? 0} g hidratos ·
-
-              ${food.calorias ?? 0} kcal
+              ${((Number(food.cantidad_g) || 0) * factorPeso).toFixed(1)} g ·
+              ${((Number(food.hidratos_g) || 0) * factorPeso).toFixed(1)} g hidratos ·
+              ${((Number(food.calorias) || 0) * factorPeso).toFixed(0)} kcal
 
             </span>
 
