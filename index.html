@@ -350,18 +350,22 @@ input[type=file]{
     alt="Foto del plato"
   >
   
-  <label for="pesoPlato">
-    ⚖️ Peso total del plato (opcional, en gramos)
-  </label>
-
-  <input
-    id="pesoPlato"
-    type="number"
-    min="1"
-    step="1"
-    placeholder="Ej. 350"
-    style="width:100%;padding:12px;border:2px solid #b7e4c7;border-radius:14px;font-size:16px;margin-top:8px"
-  >
+  <div style="margin-top:24px;padding:16px;background:#f1fff4;border:1px solid #b7e4c7;border-radius:16px;">
+    <label for="pesoPlato" style="display:block;font-weight:700;color:#28784b;margin-bottom:10px;">
+      ⚖️ Peso total del plato (opcional)
+    </label>
+    <input
+      id="pesoPlato"
+      type="number"
+      min="1"
+      step="1"
+      placeholder="Introduce el peso en gramos (ej. 350)"
+      style="width:100%;padding:14px;border:2px solid #b7e4c7;border-radius:12px;font-size:16px;background:#fff;"
+    >
+    <p style="font-size:13px;color:#667066;margin:10px 0 0;">
+      Puedes dejarlo vacío para utilizar el análisis automático.
+    </p>
+  </div>
 
   <button
     id="analyze"
