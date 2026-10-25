@@ -630,6 +630,62 @@ function borrarHistorial(index){
 
 }
 
+function verDetalleHistorial(index) {
+
+  const historial = JSON.parse(
+    localStorage.getItem('nutrifotoHistorial') || '[]'
+  );
+
+  const item = historial[index];
+
+  if (!item) return;
+
+  const foods = document.getElementById('foods');
+
+  foods.innerHTML = '';
+
+  if (item.alimentos && item.alimentos.length > 0) {
+
+    item.alimentos.forEach(food => {
+
+      const div = document.createElement('div');
+      div.className = 'food';
+
+      const nombre = document.createElement('b');
+      nombre.textContent = food.nombre || 'Alimento';
+
+      const detalle = document.createElement('p');
+      detalle.className = 'muted';
+      detalle.textContent =
+        `${food.cantidad_g} g · ${food.hidratos_g} g hidratos · ${food.calorias} kcal`;
+
+      div.appendChild(nombre);
+      div.appendChild(detalle);
+      foods.appendChild(div);
+
+    });
+
+  } else {
+
+    foods.textContent =
+      'Este análisis antiguo no tiene guardado el desglose de alimentos.';
+
+  }
+
+  document.getElementById('carbs').textContent = item.hidratos;
+  document.getElementById('ugp').textContent = item.ugp;
+  document.getElementById('protein').textContent = item.proteinas;
+  document.getElementById('fat').textContent = item.grasas;
+  document.getElementById('sugar').textContent = item.azucares ?? '—';
+
+  document.getElementById('results').style.display = 'block';
+
+  document.getElementById('results').scrollIntoView({
+    behavior: 'smooth'
+  });
+
+}
+
 
 /* FOTO DESDE CÁMARA */
 
@@ -1016,36 +1072,45 @@ analyze.addEventListener('click', async () => {
       await createThumbnail(compressedFile);
 
 
-    historial.unshift({
+    
+historial.unshift({
 
-      fecha:
-        new Date().toLocaleString('es-ES'),
+  fecha:
+    new Date().toLocaleString('es-ES'),
 
-      foto:
-        fotoHistorial,
+  foto:
+    fotoHistorial,
 
-      hidratos:
-        hidratosTotales.toFixed(1),
+  hidratos:
+    hidratosTotales.toFixed(1),
 
-      ugp:
-        ugp.toFixed(2),
+  ugp:
+    ugp.toFixed(2),
 
-      calorias:
-        data.totales.calorias ?? '—',
+  calorias:
+    data.totales.calorias ?? '—',
 
-      proteinas:
-        data.totales.proteinas_g ?? '—',
+  proteinas:
+    data.totales.proteinas_g ?? '—',
 
-      grasas:
-        data.totales.grasas_g ?? '—',
+  grasas:
+    data.totales.grasas_g ?? '—',
 
-      fibra:
-        data.totales.fibra_g ?? '—',
+  fibra:
+    data.totales.fibra_g ?? '—',
 
-      azucares:
-        data.totales.azucares_g ?? '—'
+  azucares:
+    data.totales.azucares_g ?? '—',
 
-    });
+  alimentos:
+    (data.alimentos || []).map(food => ({
+      nombre: food.nombre ?? 'Alimento',
+      cantidad_g: food.cantidad_g ?? 0,
+      hidratos_g: food.hidratos_g ?? 0,
+      calorias: food.calorias ?? 0
+    }))
+
+});
 
 
     localStorage.setItem(
