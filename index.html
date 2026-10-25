@@ -1226,12 +1226,46 @@ if ('serviceWorker' in navigator){
 
   if (!select || !amount || !list || !addButton || !clearButton) return;
 
-  Object.keys(foods).forEach(function (name) {
-    const option = document.createElement("option");
-    option.value = name;
-    option.textContent = name;
-    select.appendChild(option);
-  });
+  
+  const search = document.getElementById("gramSearch");
+
+  function loadFoods(filter = "") {
+    const previousValue = select.value;
+    const query = filter.trim().toLocaleLowerCase("es");
+
+    select.replaceChildren();
+
+    const placeholder = document.createElement("option");
+    placeholder.value = "";
+    placeholder.textContent = "Selecciona un alimento";
+    select.appendChild(placeholder);
+
+    Object.keys(foods)
+      .filter(function (name) {
+        return name.toLocaleLowerCase("es").includes(query);
+      })
+      .forEach(function (name) {
+        const option = document.createElement("option");
+        option.value = name;
+        option.textContent = name;
+        select.appendChild(option);
+      });
+
+    if (previousValue && Array.from(select.options).some(function (option) {
+      return option.value === previousValue;
+    })) {
+      select.value = previousValue;
+    }
+  }
+
+  loadFoods();
+
+  if (search) {
+    search.addEventListener("input", function () {
+      loadFoods(search.value);
+    });
+  }
+
 
   let items = [];
 
