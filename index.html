@@ -396,8 +396,21 @@ input[type=file]{
   <h2>⚖️ Calculadora por gramos</h2>
   <p>Elige un alimento, indica su peso y añádelo a tu plato.</p>
 
+  
+  <label for="gramSearch">🔎 Buscar alimento</label>
+  <input
+    id="gramSearch"
+    type="search"
+    placeholder="Ej. tortilla, pizza, pollo..."
+    autocomplete="off"
+    style="width:100%;padding:12px;border:2px solid #b7e4c7;border-radius:14px;font-size:16px;margin-bottom:12px"
+  >
+
   <label for="gramFood">Alimento</label>
   <select id="gramFood">
+    <option value="">Selecciona un alimento</option>
+  </select>
+
     <option value="">Selecciona un alimento</option>
   </select>
 
